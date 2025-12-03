@@ -1,0 +1,17 @@
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore all __pycache__ directories recursively
+**/__pycache__/
+
+# Ignore database files
+.db
+
+
+
+# Ignore virtual environments and dependency files
+venv/
+.env
+*.log
