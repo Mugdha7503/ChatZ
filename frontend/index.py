@@ -70,7 +70,7 @@ elif page == "Upload File":
         try:
             # send file to backend API
             files = {"file": uploaded_file}
-            response = requests.post("http://127.0.0.1:8000/upload", files=files)
+            response = requests.post("http://127.0.0.1:8000/upload/upload_file", files=files)
 
             if response.status_code == 200:
                 status_placeholder.success("✅ File uploaded successfully!")
