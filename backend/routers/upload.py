@@ -12,7 +12,7 @@ UPLOAD_DIR = "uploaded_pdfs"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
-@router.post("/")
+@router.post("/upload_file")
 async def upload_pdf(file: UploadFile = File(...)):
     # 1️⃣ Optional: warn if content_type is not PDF
     if file.content_type != "application/pdf":
