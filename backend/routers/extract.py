@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException 
 from fastapi.responses import JSONResponse
 import os
 import PyPDF2
@@ -36,16 +36,23 @@ async def extract_pdf_text(file_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error extracting text: {e}")
 
-    # 3️⃣ Save the extracted text
+    # 3️⃣ Save extracted text
     with open(extracted_path, "w", encoding="utf-8") as out:
         out.write(extracted_text)
 
-    # 4️⃣ Return success response
+    # 4️⃣ Create preview (first lines or first 300 chars)
+    preview_lines = "\n".join(extracted_text.split("\n")[:5])  # first 5 lines
+    preview_chars = extracted_text[:300]                        # first 300 chars
+
+    preview_text = preview_lines if len(preview_lines) > 0 else preview_chars
+
+    # 5️⃣ Return success response
     return JSONResponse(
         content={
             "message": "Text extracted successfully",
             "file_id": file_id,
             "text_file": f"{file_id}.txt",
             "text_length": len(extracted_text),
+            "preview_text": preview_text.strip()  # 🆕 added preview
         }
     )
