@@ -83,10 +83,10 @@ elif page == "Upload File":
                 status.success("✅ File uploaded successfully!")
                 return resp.json()
             else:
-                status.error(f"❌ Failed: {resp.text}")
+                status.error("❌ Upload failed. The server could not process your file. Try again.")
                 return None
         except Exception as e:
-            status.error(f"⚠️ Error: {e}")
+            status.error("⚠️ Something went wrong while uploading. Please try again.")
 
     # Upload on file selection
     if uploaded_file:
@@ -121,16 +121,46 @@ if page == "Upload File":
                         preview_text = data.get("preview_text", "")
                         extract_status.success("✅ Text extracted successfully!")
                         preview_area.text_area("Preview Extracted Text", preview_text, height=300)
+                        
+                        
+                        st.session_state.extracted = True
+                        st.session_state.extracted_file_id = data["file_id"] 
+                        
                     else:
-                        extract_status.error(f"❌ Extract failed: {resp.text}")
+                        extract_status.error("❌ Extraction failed. The PDF might be scanned, encrypted, or unreadable.")
+                        st.session_state.extracted = False 
+                        
                 except Exception as e:
-                    extract_status.error(f"⚠️ Error: {e}")
+                    extract_status.error("⚠️ Something went wrong during text extraction. Please try again.")
+                    st.session_state.extracted = False
                     
                     
 # ------------------------------------
 # PAGE: EMBEDDING
 # ------------------------------------
+if page == "Upload File":
+    
+    if "extracted" in st.session_state and st.session_state.extracted:
 
+        st.markdown("---")
+        st.subheader("🧠 Create Embeddings")
+        embed_status = st.empty()
+
+        if st.button("Create Embeddings"):
+            with st.spinner("Creating embeddings..."):
+                try:
+                    file_id = st.session_state.get("extracted_file_id", st.session_state.uploaded_file_id)
+                    resp = requests.post(f"{API_URL}/embed/{file_id}")
+                    if resp.status_code == 200:
+                        embed_status.success("✅ Embeddings created successfully!")
+                        st.session_state.embeddings_done = True
+                        
+                    else:
+                        embed_status.error("❌ Could not create embeddings. Please retry after some time.")
+                        st.session_state.embeddings_done = False
+                except Exception as e:
+                    embed_status.error("⚠️ Unexpected error while creating embeddings. Please try again.")
+                    st.session_state.embeddings_done = False
 
 # ------------------------------------
 # PAGE: Chat
