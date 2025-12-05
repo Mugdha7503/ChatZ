@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import chromadb
+import logging
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 
 router = APIRouter(prefix="/query", tags=["Query"])
-
+logger = logging.getLogger("QueryRouter")
 # Persistent client and collection
 chroma_client = chromadb.PersistentClient(path="chroma_db")
 collection = chroma_client.get_or_create_collection(name="pdf_collection")
@@ -19,6 +20,7 @@ class QueryRequest(BaseModel):
 
 @router.post("/")
 async def query_pdf(data: QueryRequest):
+    logger.info(f"🔎 Query received: file_id={data.file_id}, question={data.question}")
     question = data.question
     file_id = data.file_id
 
@@ -68,3 +70,4 @@ async def query_pdf(data: QueryRequest):
             for m in metadatas_list[0]
         ]
     }
+
