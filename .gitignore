@@ -15,5 +15,10 @@ venv/
 .env
 *.log
 
+
 extracted_text/
 uploaded_pdfs/
+
+extracted_text
+uploaded_pdfs
+

@@ -5,177 +5,102 @@ API_URL = "http://127.0.0.1:8000"
 
 st.set_page_config(page_title="ChatZ", layout="wide")
 
-# ------------------------------------
-# CSS for better UI
-# ------------------------------------
-st.markdown("""
-<style>
-/* Center container for a cleaner look */
-.main-container {
-    max-width: 850px;
-    margin: auto;
-}
+st.title("📚 ChatZ – PDF AI Assistant")
 
-/* Floating hamburger button */
-.hamburger-btn {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 9999;
-}
-</style>
-""", unsafe_allow_html=True)
+# ----------------------------
+# PAGE SELECTION
+# ----------------------------
+page = st.sidebar.radio("Navigation", ["Upload", "Extract", "Embed", "Query"])
 
-# ------------------------------------
-# Toggle Sidebar State
-# ------------------------------------
-if "sidebar" not in st.session_state:
-    st.session_state.sidebar = False
 
-def toggle_sidebar():
-    st.session_state.sidebar = not st.session_state.sidebar
-
-# Floating Hamburger Button
-with st.container():
-    st.markdown('<div class="hamburger-btn">', unsafe_allow_html=True)
-    st.button("☰", on_click=toggle_sidebar)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# ------------------------------------
-# Sidebar
-# ------------------------------------
-if st.session_state.sidebar:
-    with st.sidebar:
-        st.title("Menu")
-        page = st.radio("Navigate:", ["Home", "Upload File"])
-else:
-    page = "Home"
-
-# Page Container
-st.markdown('<div class="main-container">', unsafe_allow_html=True)
-
-# ------------------------------------
-# PAGE: HOME
-# ------------------------------------
-if page == "Home":
-    st.title("🏠 Home")
-    st.write("Welcome to **ChatZ** — your AI-powered assistant!")
-    
-
-# ------------------------------------
+# ----------------------------
 # PAGE: UPLOAD
-# ------------------------------------
-elif page == "Upload File":
-    st.title("📤 Upload PDF")
-    st.write("Upload your document to process it.")
+# ----------------------------
+if page == "Upload":
+    st.header("📤 Upload PDF")
 
-    uploaded_file = st.file_uploader("Select PDF File", type=["pdf"])
-    status = st.empty()
+    uploaded = st.file_uploader("Select PDF file", type=["pdf"])
 
-    # Upload function
-    def upload_to_backend(file):
-        status.info("📡 Uploading... Please wait.")
-        try:
-            files = {"file": file}
+    if uploaded:
+        if st.button("Upload File"):
+            files = {"file": uploaded}
+
             resp = requests.post(f"{API_URL}/upload/upload_file", files=files)
 
             if resp.status_code == 200:
-                status.success("✅ File uploaded successfully!")
-                return resp.json()
+                data = resp.json()
+                st.success("Uploaded successfully!")
+                st.session_state.file_id = data["file_id"]
+                st.write("File ID:", data["file_id"])
             else:
-                status.error(f"❌ Failed: {resp.text}")
-                return None
-        except Exception as e:
-            status.error(f"⚠️ Error: {e}")
+                st.error(resp.text)
 
-    # Upload on file selection
-    if uploaded_file:
-        with st.spinner("Processing..."):
-            response = upload_to_backend(uploaded_file)
-            if response and "file_id" in response:
-                st.session_state.uploaded_file_id = response["file_id"]
-            
 
-# ------------------------------------
+# ----------------------------
 # PAGE: EXTRACT
-# ------------------------------------
+# ----------------------------
+elif page == "Extract":
+    st.header("📑 Extract Text")
 
-if page == "Upload File":
+    if "file_id" not in st.session_state:
+        st.warning("Upload a file first!")
+    else:
+        if st.button("Extract Text"):
+            fid = st.session_state.file_id
+            resp = requests.get(f"{API_URL}/extract/{fid}")
 
-    # Only show extract if a file was successfully uploaded
-    if "uploaded_file_id" in st.session_state and st.session_state.uploaded_file_id:
+            if resp.status_code == 200:
+                data = resp.json()
+                st.success("Text extracted!")
+                st.text_area("Preview", data["preview_text"])
+                st.session_state.extracted = True
+            else:
+                st.error(resp.text)
 
-        st.markdown("---")
-        st.subheader("📑 Extract Text")
-        extract_status = st.empty()
-        preview_area = st.empty()
 
-        # Extract button
-        if st.button("🔍 Extract"):
-            with st.spinner("Extracting text..."):
-                try:
-                    file_id = st.session_state.uploaded_file_id
-                    resp = requests.get(f"{API_URL}/extract/{file_id}")
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        preview_text = data.get("preview_text", "")
-                        extract_status.success("✅ Text extracted successfully!")
-                        preview_area.text_area("Preview Extracted Text", preview_text, height=300)
-                        st.session_state.extracted = True
-                        st.session_state.extracted_file_id = data["file_id"] 
-                    else:
-                        extract_status.error(f"❌ Extract failed: {resp.text}")
-                except Exception as e:
-                    extract_status.error(f"⚠️ Error: {e}")
-                    
-                    
-# ------------------------------------
-# PAGE: EMBEDDING
-# ------------------------------------
-if page == "Upload File":
-    
-    if "extracted" in st.session_state and st.session_state.extracted:
+# ----------------------------
+# PAGE: EMBED
+# ----------------------------
+elif page == "Embed":
+    st.header("🧠 Generate Embeddings")
 
-        st.markdown("---")
-        st.subheader("🧠 Create Embeddings")
-        embed_status = st.empty()
-
+    if "extracted" not in st.session_state:
+        st.warning("Extract text first!")
+    else:
         if st.button("Create Embeddings"):
-            with st.spinner("Creating embeddings..."):
-                try:
-                    file_id = st.session_state.get("extracted_file_id", st.session_state.uploaded_file_id)
-                    resp = requests.post(f"{API_URL}/embed/{file_id}")
-                    if resp.status_code == 200:
-                        embed_status.success("✅ Embeddings created successfully!")
-                        st.session_state.embeddings_done = True
-                        
-                    else:
-                        embed_status.error("❌ Could not create embeddings. Please retry after some time.")
-                        st.session_state.embeddings_done = False
-                except Exception as e:
-                    embed_status.error("⚠️ Unexpected error while creating embeddings. Please try again.")
-                    st.session_state.embeddings_done = False
+            fid = st.session_state.file_id
+            resp = requests.post(f"{API_URL}/embed/{fid}")
 
-# ------------------------------------
-# PAGE: Chat
-# ------------------------------------
-# ------------------------------------
+            if resp.status_code == 200:
+                st.success("Embeddings created!")
+                st.session_state.embeddings_done = True
+            else:
+                st.error(resp.text)
+
+
+# ----------------------------
 # PAGE: QUERY
-# ------------------------------------
+# ----------------------------
+elif page == "Query":
+    st.header("💬 Ask Questions")
 
-if page == "Upload File":
+    if "embeddings_done" not in st.session_state:
+        st.warning("Create embeddings first!")
+    else:
+        q = st.text_input("Your question:")
 
-    if "uploaded_file_id" in st.session_state and st.session_state.uploaded_file_id:
+        if st.button("Ask"):
+            fid = st.session_state.file_id
+            resp = requests.post(f"{API_URL}/query/", json={"question": q, "file_id": fid})
 
-        st.markdown("---")
-        st.subheader("💬 Query PDF")
+            if resp.status_code == 200:
+                data = resp.json()
+                st.success(data["answer"])
 
-        # Query textbox
-        question = st.text_input("Ask a question related to the uploaded PDF:")
+                st.subheader("Sources")
+                for src in data["sources"]:
+                    st.write(src)
 
-        if st.button("❓ Ask"):
-            if not question:
-                st.warning("Please enter a question.")
             else:
                 with st.spinner("Searching..."):
                     try:
@@ -222,3 +147,5 @@ if page == "Upload File":
 
                     except Exception as e:
                         st.error(f"⚠️ Error: {e}")
+                st.error(resp.text)
+

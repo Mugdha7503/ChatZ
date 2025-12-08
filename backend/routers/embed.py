@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import os
 import chromadb
+import logging
 from chromadb import PersistentClient
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from dotenv import load_dotenv
@@ -9,6 +10,7 @@ from backend.routers.chunk import chunk_text
 load_dotenv()
 
 router = APIRouter(prefix="/embed", tags=["Embedding"])
+logger = logging.getLogger("EmbedRouter")
 
 EXTRACT_DIR = "extracted_text"
 UPLOAD_DIR = "uploaded_pdfs"
@@ -40,16 +42,19 @@ def generate_embedding(text: str):
 # ---------- API: Embed & Store ----------
 @router.post("/{file_id}")
 async def embed_and_store(file_id: str):
-
+    logger.info(f"🚀 Embedding request: file_id={file_id}")
     text_path = os.path.join(EXTRACT_DIR, f"{file_id}.txt")
 
     if not os.path.exists(text_path):
+        logger.error("❌ Extracted text not found for embedding")
         raise HTTPException(status_code=404, detail="Extracted text not found")
 
     with open(text_path, "r", encoding="utf-8") as f:
         text = f.read()
-
+    logger.info(f"🔠 Loaded text for embedding ({len(text)} chars)")
     chunks = chunk_text(text, chunk_size=500, overlap=50)
+
+    logger.info(f"📦 Total chunks to embed: {len(chunks)}")
 
     collection = get_collection()
 
@@ -74,6 +79,7 @@ async def embed_and_store(file_id: str):
     )
 
     return {"message": "Embeddings stored", "file_id": file_id, "total_chunks": len(chunks)}
+
 
 
 # ---------- API: Delete File & Embeddings ----------
