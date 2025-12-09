@@ -4,21 +4,16 @@
 
 This document provides a comprehensive workflow diagram for the ChatZ PDF Query System. The system processes PDF documents through a five-stage pipeline to enable intelligent querying using AI.
 
-## Quick Access to Diagrams
+## Key Features
 
-1. **Interactive HTML Diagram**: Open `workflow_diagram.html` in any web browser for a beautiful, interactive workflow visualization.
-
-2. **Mermaid Diagram**: The `workflow_diagram.mmd` file can be viewed in:
-   - GitHub (renders automatically)
-   - VS Code (with Mermaid extension)
-   - Online Mermaid editors
-   - Documentation tools that support Mermaid
-
-3. **Markdown Documentation**: `workflow_diagram.md` contains:
-   - Mermaid diagram code
-   - Detailed step-by-step explanations
-   - ASCII art workflow diagram
-   - Technology stack information
+✅ **File Validation**: Ensures only valid PDF/TXT files are processed  
+✅ **Duplicate Detection**: Checks for existing files before re-uploading  
+✅ **Metadata Tracking**: Maintains file information in SQLite database  
+✅ **Efficient Chunking**: Overlapping chunks prevent information loss  
+✅ **Vector Search**: Fast similarity search using ChromaDB  
+✅ **Document-Specific**: Queries are filtered by file_id  
+✅ **Context-Aware**: LLM receives relevant context for accurate answers  
+✅ **Clean Architecture**: Separation of concerns with router modules  
 
 ## Workflow Stages
 
@@ -150,7 +145,7 @@ User Upload
 User receives answer
 ```
 
-## File Structure
+## Folder Structure
 
 ```
 ChatZ/
@@ -172,16 +167,6 @@ ChatZ/
     └── index.py           # Streamlit frontend
 ```
 
-## Key Features
-
-✅ **File Validation**: Ensures only valid PDF/TXT files are processed  
-✅ **Duplicate Detection**: Checks for existing files before re-uploading  
-✅ **Metadata Tracking**: Maintains file information in SQLite database  
-✅ **Efficient Chunking**: Overlapping chunks prevent information loss  
-✅ **Vector Search**: Fast similarity search using ChromaDB  
-✅ **Document-Specific**: Queries are filtered by file_id  
-✅ **Context-Aware**: LLM receives relevant context for accurate answers  
-✅ **Clean Architecture**: Separation of concerns with router modules  
 
 ## Usage Flow
 
@@ -197,11 +182,39 @@ ChatZ/
 - `POST /embed/{file_id}` - Generate embeddings
 - `POST /query/` - Query the document
 
-## Notes
 
-- The chunking step is integrated into the embed stage for efficiency
-- Extracted text files are automatically deleted after embedding to save space
-- ChromaDB uses cosine similarity for vector search
-- The system supports multiple files, each tracked by unique file_id
-- Embedding status is tracked to prevent duplicate processing
+# 🚀 How to Run the Project
 
+Follow these steps to set up and run the project on your local system:
+
+### 1️⃣ Clone the Repository
+- Clone the project from GitHub using:
+ ```bash
+git clone https://github.com/Mugdha7503/ChatZ.git
+cd ChatZ
+```
+
+### 2️⃣ Create a Virtual Environment
+```bash
+python -m venv venv
+```
+- Activate the Virtual Environment
+```bash
+venv\Scripts\activate
+```
+
+### 3️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4️⃣ Run the Development Server
+```bash
+uvicorn backend.main:app --reload
+streamlit run frontend/index.py
+```
+
+## 👥 Contributors
+
+- [Vandana Ranasara](https://github.com/vandanaranasara)
+- [Mugdha Upadhyay](https://github.com/mugdha7503)

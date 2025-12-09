@@ -46,22 +46,32 @@ async def query_pdf(data: QueryRequest):
     # 4️⃣ Call LLM with context
     model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
     prompt = f"""
-    Use ONLY the context below to answer the question.
+    You are an expert AI assistant designed to answer user questions strictly using the provided context.
 
+    Follow these rules:
+    1. Use ONLY the information present in the context.
+    2. Do NOT add assumptions, external knowledge, or invented details.
+    3. If the answer is not found in the context, reply with:
+    "The information you requested is not available in the document."
+    4. Keep the answer concise (4–5 lines), clear, and user-friendly.
+    5. Maintain accuracy and avoid repetition.
+
+    -----------------------------
     CONTEXT:
     {context}
+    -----------------------------
 
-    QUESTION:
+    USER QUESTION:
     {question}
 
-    Answer in 4–5 lines.
+    Now provide the best possible answer based only on the context.
     """
+    
     llm_response = model.invoke(prompt)
     answer = llm_response.content
 
     # 5️⃣ Return answer
     
-
     return {
         "answer": answer
     }
