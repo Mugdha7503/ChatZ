@@ -25,7 +25,6 @@ def get_collection():
         metadata={"hnsw:space": "cosine"}
     )
 
-
 def generate_embedding(text: str):
     embedder = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     return embedder.embed_documents([text])[0]

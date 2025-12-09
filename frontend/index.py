@@ -102,8 +102,9 @@ if page == "Upload":
     uploaded = st.file_uploader("Select PDF file", type=["pdf"])
 
     if uploaded and st.button("Upload File"):
-        files = {"file": uploaded}
-        resp = requests.post(f"{API_URL}/upload/upload_file", files=files)
+        with st.spinner("⏳ Uploading your file... Please wait"):
+            files = {"file": uploaded}
+            resp = requests.post(f"{API_URL}/upload/upload_file", files=files)
 
         if resp.status_code == 200:
             data = resp.json()
@@ -128,8 +129,9 @@ elif page == "Extract":
     st.header("📑 Extract Text")
 
     if st.button("Extract Text"):
-        fid = st.session_state.file_id
-        resp = requests.get(f"{API_URL}/extract/{fid}")
+        with st.spinner("⏳ Extracting text... Please wait"):
+            fid = st.session_state.file_id
+            resp = requests.get(f"{API_URL}/extract/{fid}")
 
         if resp.status_code == 200:
             data = resp.json()
@@ -149,8 +151,9 @@ elif page == "Embed":
         st.warning("Extract text first!")
     else:
         if st.button("Create Embeddings"):
-            fid = st.session_state.file_id
-            resp = requests.post(f"{API_URL}/embed/{fid}")
+            with st.spinner("⏳ Creating AI embeddings... Please wait"):
+                fid = st.session_state.file_id
+                resp = requests.post(f"{API_URL}/embed/{fid}")
 
             if resp.status_code == 200:
                 st.success("Embeddings created!")
@@ -169,8 +172,9 @@ elif page == "Query":
     q = st.text_input("Your question:")
 
     if st.button("Ask"):
-        fid = st.session_state.file_id
-        resp = requests.post(f"{API_URL}/query/", json={"question": q, "file_id": fid})
+        with st.spinner("⏳ Thinking... generating answer"):
+            fid = st.session_state.file_id
+            resp = requests.post(f"{API_URL}/query/", json={"question": q, "file_id": fid})
 
         if resp.status_code == 200:
             data = resp.json()

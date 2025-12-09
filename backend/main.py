@@ -5,7 +5,6 @@ from backend.config import setup_logging
 import logging
 from backend.database import engine, Base
 
-
 setup_logging()
 logger = logging.getLogger("MainApp")
 
