@@ -1,0 +1,166 @@
+<svg width="1400" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="uploadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e1f5ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b3e5fc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="extractGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffe0b2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="chunkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e1bee7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="embedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f5e9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c8e6c9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="queryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fce4ec;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f8bbd0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="40" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#333">ChatZ Workflow Diagram</text>
+  <text x="700" y="70" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#666">Upload → Extract → Chunk → Embed → Query</text>
+  
+  <!-- Step 1: Upload -->
+  <rect x="50" y="150" width="200" height="200" rx="15" fill="url(#uploadGrad)" stroke="#0277bd" stroke-width="3"/>
+  <text x="150" y="190" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">📤</text>
+  <text x="150" y="230" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#0277bd">1. Upload</text>
+  <text x="150" y="260" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">User uploads PDF/TXT</text>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Backend validates file</text>
+  <text x="150" y="300" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">File saved with file_id</text>
+  <text x="150" y="320" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Metadata stored in DB</text>
+  
+  <!-- Arrow 1 -->
+  <path d="M 250 250 L 300 250" stroke="#667eea" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="275" y="245" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#667eea">→</text>
+  
+  <!-- Step 2: Extract -->
+  <rect x="300" y="150" width="200" height="200" rx="15" fill="url(#extractGrad)" stroke="#e65100" stroke-width="3"/>
+  <text x="400" y="190" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">📑</text>
+  <text x="400" y="230" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#e65100">2. Extract</text>
+  <text x="400" y="260" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">System reads PDF</text>
+  <text x="400" y="280" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Extracts full text</text>
+  <text x="400" y="300" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Returns preview text</text>
+  <text x="400" y="320" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Saves to extracted_text/</text>
+  
+  <!-- Arrow 2 -->
+  <path d="M 500 250 L 550 250" stroke="#667eea" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="525" y="245" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#667eea">→</text>
+  
+  <!-- Step 3: Chunk -->
+  <rect x="550" y="150" width="200" height="200" rx="15" fill="url(#chunkGrad)" stroke="#6a1b9a" stroke-width="3"/>
+  <text x="650" y="190" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">✂️</text>
+  <text x="650" y="230" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#6a1b9a">3. Chunk</text>
+  <text x="650" y="260" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Text split into chunks</text>
+  <text x="650" y="280" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Size: 500-1000 chars</text>
+  <text x="650" y="300" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Overlap: 50-100 chars</text>
+  <text x="650" y="320" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Linked to file_id</text>
+  
+  <!-- Arrow 3 -->
+  <path d="M 750 250 L 800 250" stroke="#667eea" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="775" y="245" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#667eea">→</text>
+  
+  <!-- Step 4: Embed -->
+  <rect x="800" y="150" width="200" height="200" rx="15" fill="url(#embedGrad)" stroke="#2e7d32" stroke-width="3"/>
+  <text x="900" y="190" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">🧠</text>
+  <text x="900" y="230" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2e7d32">4. Embed</text>
+  <text x="900" y="260" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Chunks to embedding model</text>
+  <text x="900" y="280" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Generates vectors</text>
+  <text x="900" y="300" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Saves in ChromaDB</text>
+  <text x="900" y="320" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Updates DB status</text>
+  
+  <!-- Arrow 4 -->
+  <path d="M 1000 250 L 1050 250" stroke="#667eea" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="1025" y="245" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#667eea">→</text>
+  
+  <!-- Step 5: Query -->
+  <rect x="1050" y="150" width="200" height="200" rx="15" fill="url(#queryGrad)" stroke="#c2185b" stroke-width="3"/>
+  <text x="1150" y="190" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">💬</text>
+  <text x="1150" y="230" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#c2185b">5. Query</text>
+  <text x="1150" y="260" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">User submits question</text>
+  <text x="1150" y="280" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Query embedded</text>
+  <text x="1150" y="300" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">Similarity search (top 3)</text>
+  <text x="1150" y="320" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#555">LLM returns answer</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#667eea" />
+    </marker>
+  </defs>
+  
+  <!-- Additional details section -->
+  <rect x="50" y="400" width="1300" height="350" rx="10" fill="#f9f9f9" stroke="#ddd" stroke-width="2"/>
+  <text x="700" y="430" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Detailed Process Flow</text>
+  
+  <!-- Upload details -->
+  <rect x="70" y="450" width="240" height="280" rx="8" fill="white" stroke="#0277bd" stroke-width="2"/>
+  <text x="190" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#0277bd">Upload Details</text>
+  <text x="80" y="500" font-family="Arial, sans-serif" font-size="12" fill="#555">• Validate file type (PDF/TXT)</text>
+  <text x="80" y="520" font-family="Arial, sans-serif" font-size="12" fill="#555">• Check for duplicates</text>
+  <text x="80" y="540" font-family="Arial, sans-serif" font-size="12" fill="#555">• Generate UUID file_id</text>
+  <text x="80" y="560" font-family="Arial, sans-serif" font-size="12" fill="#555">• Save to uploaded_pdfs/</text>
+  <text x="80" y="580" font-family="Arial, sans-serif" font-size="12" fill="#555">• Store metadata in SQLite</text>
+  <text x="80" y="600" font-family="Arial, sans-serif" font-size="12" fill="#555">• Extract page count</text>
+  <text x="80" y="620" font-family="Arial, sans-serif" font-size="12" fill="#555">• Set embedding_status = False</text>
+  <text x="80" y="640" font-family="Arial, sans-serif" font-size="12" fill="#555">• Return file_id to user</text>
+  <text x="80" y="660" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: file_id, metadata</text>
+  
+  <!-- Extract details -->
+  <rect x="330" y="450" width="240" height="280" rx="8" fill="white" stroke="#e65100" stroke-width="2"/>
+  <text x="450" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#e65100">Extract Details</text>
+  <text x="340" y="500" font-family="Arial, sans-serif" font-size="12" fill="#555">• Read PDF from uploaded_pdfs/</text>
+  <text x="340" y="520" font-family="Arial, sans-serif" font-size="12" fill="#555">• Use PyPDF2 library</text>
+  <text x="340" y="540" font-family="Arial, sans-serif" font-size="12" fill="#555">• Extract text from all pages</text>
+  <text x="340" y="560" font-family="Arial, sans-serif" font-size="12" fill="#555">• Combine into single text</text>
+  <text x="340" y="580" font-family="Arial, sans-serif" font-size="12" fill="#555">• Save to extracted_text/</text>
+  <text x="340" y="600" font-family="Arial, sans-serif" font-size="12" fill="#555">• Generate preview (1000 chars)</text>
+  <text x="340" y="620" font-family="Arial, sans-serif" font-size="12" fill="#555">• Return preview &amp; length</text>
+  <text x="340" y="640" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: preview_text</text>
+  <text x="340" y="660" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: text_length</text>
+  
+  <!-- Chunk details -->
+  <rect x="590" y="450" width="240" height="280" rx="8" fill="white" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="710" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Chunk Details</text>
+  <text x="600" y="500" font-family="Arial, sans-serif" font-size="12" fill="#555">• Read extracted text file</text>
+  <text x="600" y="520" font-family="Arial, sans-serif" font-size="12" fill="#555">• Split into chunks</text>
+  <text x="600" y="540" font-family="Arial, sans-serif" font-size="12" fill="#555">• Default: 700 chars/chunk</text>
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="12" fill="#555">• Overlap: 100 chars</text>
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="12" fill="#555">• Range: 500-1000 chars</text>
+  <text x="600" y="600" font-family="Arial, sans-serif" font-size="12" fill="#555">• Link each chunk to file_id</text>
+  <text x="600" y="620" font-family="Arial, sans-serif" font-size="12" fill="#555">• Prevent info loss</text>
+  <text x="600" y="640" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: chunks array</text>
+  <text x="600" y="660" font-family="Arial, sans-serif" font-size="12" fill="#555">• Ready for embedding</text>
+  
+  <!-- Embed details -->
+  <rect x="850" y="450" width="240" height="280" rx="8" fill="white" stroke="#2e7d32" stroke-width="2"/>
+  <text x="970" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2e7d32">Embed Details</text>
+  <text x="860" y="500" font-family="Arial, sans-serif" font-size="12" fill="#555">• Model: gemini-embedding-001</text>
+  <text x="860" y="520" font-family="Arial, sans-serif" font-size="12" fill="#555">• Convert chunks to vectors</text>
+  <text x="860" y="540" font-family="Arial, sans-serif" font-size="12" fill="#555">• Generate embeddings</text>
+  <text x="860" y="560" font-family="Arial, sans-serif" font-size="12" fill="#555">• Store in ChromaDB</text>
+  <text x="860" y="580" font-family="Arial, sans-serif" font-size="12" fill="#555">• Add metadata (file_id)</text>
+  <text x="860" y="600" font-family="Arial, sans-serif" font-size="12" fill="#555">• Update DB: status = True</text>
+  <text x="860" y="620" font-family="Arial, sans-serif" font-size="12" fill="#555">• Delete temp text file</text>
+  <text x="860" y="640" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: total_chunks</text>
+  <text x="860" y="660" font-family="Arial, sans-serif" font-size="12" fill="#555">• Ready for queries</text>
+  
+  <!-- Query details -->
+  <rect x="1110" y="450" width="240" height="280" rx="8" fill="white" stroke="#c2185b" stroke-width="2"/>
+  <text x="1230" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#c2185b">Query Details</text>
+  <text x="1120" y="500" font-family="Arial, sans-serif" font-size="12" fill="#555">• Receive question &amp; file_id</text>
+  <text x="1120" y="520" font-family="Arial, sans-serif" font-size="12" fill="#555">• Embed the question</text>
+  <text x="1120" y="540" font-family="Arial, sans-serif" font-size="12" fill="#555">• Similarity search in ChromaDB</text>
+  <text x="1120" y="560" font-family="Arial, sans-serif" font-size="12" fill="#555">• Filter by file_id</text>
+  <text x="1120" y="580" font-family="Arial, sans-serif" font-size="12" fill="#555">• Retrieve top 3 chunks</text>
+  <text x="1120" y="600" font-family="Arial, sans-serif" font-size="12" fill="#555">• Build context string</text>
+  <text x="1120" y="620" font-family="Arial, sans-serif" font-size="12" fill="#555">• Send to Gemini LLM</text>
+  <text x="1120" y="640" font-family="Arial, sans-serif" font-size="12" fill="#555">• Model: gemini-2.5-flash</text>
+  <text x="1120" y="660" font-family="Arial, sans-serif" font-size="12" fill="#555">• Output: final answer</text>
+</svg>
+

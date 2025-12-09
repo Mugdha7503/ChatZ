@@ -45,9 +45,16 @@ def restrict(page):
 
 # Sidebar Navigation
 page = st.sidebar.radio("Navigation", ["Upload", "Extract", "Embed", "Query"])
+st.sidebar.markdown("### 📘 User Manual")
+st.sidebar.markdown("""
+ Step 1: Upload your PDF in **Upload**.\n\n
+ Step 2: Extract text from the file in **Extract**.\n\n
+ Step 3: Generate AI embeddings in **Embed**.\n\n
+ Step 4: Ask questions about your PDF in **Query**.\n\n
+ Follow steps in order for best results.
+""")
+
 restrict(page)
-
-
 
 # ----------------------------
 # PAGE: UPLOAD
@@ -114,7 +121,6 @@ if page == "Upload":
         else:
             st.error(resp.text)
 
-
 # ----------------------------
 # PAGE: EXTRACT
 # ----------------------------
@@ -132,8 +138,6 @@ elif page == "Extract":
             st.session_state.extracted = True
         else:
             st.error(resp.text)
-
-
 
 # ----------------------------
 # PAGE: EMBED
