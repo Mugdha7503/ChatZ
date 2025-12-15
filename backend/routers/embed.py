@@ -6,7 +6,6 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from dotenv import load_dotenv
 from backend.database import SessionLocal
 from backend.models import FileInfo
-from backend.routers.chunk import chunk_text
 
 load_dotenv()
 
@@ -17,6 +16,26 @@ UPLOAD_DIR = os.getenv("UPLOAD_DIR")
 EXTRACT_DIR = os.getenv("EXTRACT_DIR")
 
 client = PersistentClient(path="chroma_db")
+
+def chunk_text(text, chunk_size=700, overlap=100):
+    logger.info(f"✂️ Chunking text: chunk_size={chunk_size}, overlap={overlap}")
+    """
+    Splits the text into chunks with overlap.
+    chunk_size = number of characters per chunk
+    overlap = number of characters that overlap between chunks
+    """
+    chunks = []
+    start = 0
+
+    while start < len(text):
+        end = start + chunk_size
+        chunk = text[start:end]
+        chunks.append(chunk)
+
+        # Move pointer with overlap
+        start = end - overlap  
+    logger.info(f"📦 Total chunks created: {len(chunks)}")
+    return chunks
 
 
 def get_collection():
@@ -43,7 +62,7 @@ async def embed_and_store(file_id: str):
         text = f.read()
 
     # Chunk text
-    chunks = chunk_text(text, chunk_size=700, overlap=100)
+    chunks = chunk_text(text)
 
     collection = get_collection()
 

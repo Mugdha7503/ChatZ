@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from backend.routers import upload, extract,chunk,embed,query
+from backend.routers import upload, extract ,embed ,query
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import setup_logging
 import logging
@@ -34,6 +34,5 @@ app.add_middleware(
 
 app.include_router(upload.router)
 app.include_router(extract.router)
-app.include_router(chunk.router)
 app.include_router(embed.router)
 app.include_router(query.router)

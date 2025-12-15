@@ -6,6 +6,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 
 router = APIRouter(prefix="/query", tags=["Query"])
 logger = logging.getLogger("QueryRouter")
+
 # Persistent client and collection
 chroma_client = chromadb.PersistentClient(path="chroma_db")
 collection = chroma_client.get_or_create_collection(name="pdf_collection")

@@ -1,9 +1,8 @@
-from fastapi import UploadFile, File, HTTPException, APIRouter
+from fastapi import UploadFile, File, HTTPException, APIRouter, Depends
 from fastapi.responses import JSONResponse
 import uuid, os, logging, fitz
 from datetime import datetime
 from sqlalchemy.orm import Session
-from fastapi import Depends
 from backend.database import SessionLocal, get_db
 from backend.models import FileInfo
 import os
